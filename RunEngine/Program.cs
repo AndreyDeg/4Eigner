@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Action_NLua;
 using BaseEngine;
 using BaseEngine.ModelWorld;
@@ -14,12 +15,19 @@ namespace RunEngine
 	{
 		static void Main(string[] args)
 		{
+			//new Thread(() => RunEngine("5Eigner", "LuaScripts\\test2\\main.lua")).Start();
+
+			RunEngine("4Eigner", "LuaScripts\\test1\\main.lua");
+		}
+
+		static void RunEngine(string windowName, string actionFile)
+		{
 			//var content = new Content();
 			//var file	= new FileManager();
 			var world = new World();
 
 			//var input = new Input();
-			var window = new Window("4Eigner", "4Eigner");
+			var window = new Window(windowName, windowName);
 			var render = new DirectX();
 
 			var action = new MyLua();
@@ -65,7 +73,7 @@ namespace RunEngine
 			};
 
 			render.ActiveCamera = camera;
-			action.DoFile("LuaScripts\\test1\\main.lua");
+			action.DoFile(actionFile);
 			camera.Map = world.GetMap(0);
 			//Controller::network->Init();
 

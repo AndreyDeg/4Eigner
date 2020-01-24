@@ -11,18 +11,21 @@ namespace Logic_PhyX.Net
 	{
 		public Scene Scene { get; private set; }
 
-		Physics Physics;
+		static Physics Physics;
+		static Foundation foundation;
+
+		static readonly object locker = new object();
 
 		public MyPhysX()
 		{
-			// Construct physics objects
-			ErrorOutput errorOutput = new ErrorOutput();
-
-			Foundation foundation = new Foundation(errorOutput);
-
-			var pvd = new PhysX.VisualDebugger.Pvd(foundation);
-
-			Physics = new Physics(foundation, true, pvd);
+			lock(locker)
+				if (foundation == null)
+				{
+					ErrorOutput errorOutput = new ErrorOutput();
+					foundation = new Foundation(errorOutput);
+					var pvd = new PhysX.VisualDebugger.Pvd(foundation);
+					Physics = new Physics(foundation, true, pvd);
+				}
 
 			Scene = Physics.CreateScene(CreateSceneDesc(foundation));
 

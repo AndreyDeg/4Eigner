@@ -6,8 +6,6 @@ namespace View_WinAPI
 {
 	public class Window : IViewWindow
 	{
-		private static Window singleton;
-
 		public IntPtr hWnd { get; private set; }
 		public IntPtr hInstance;
 
@@ -24,21 +22,23 @@ namespace View_WinAPI
 		public Action<uint> OnKeyDown { get; set; }
 		public Action<uint> OnKeyUp { get; set; }
 
-		private static readonly WndProcDelegate WndProc = delegate(IntPtr hWnd, WM message, IntPtr wParam, IntPtr lParam)
+		readonly WndProcDelegate WndProc;
+
+		private IntPtr WndProcFunc(IntPtr hWnd, WM message, IntPtr wParam, IntPtr lParam)
 		{
 			switch (message)
 			{
 				case WM.DESTROY:
 				{
-					singleton.Close();
+					Win32.PostQuitMessage(0);
 
 					return IntPtr.Zero;
 				}
 
 				case WM.TIMER:
 				{
-					if (singleton.OnTimer != null)
-						singleton.OnTimer();
+					if (OnTimer != null)
+						OnTimer();
 
 					return IntPtr.Zero;
 				}
@@ -49,8 +49,8 @@ namespace View_WinAPI
 					uint y = ((uint)lParam.ToInt32() >> 16) & 0xffff;
 					long keys = wParam.ToInt64();
 
-					if (singleton.OnMouseMove != null)
-						singleton.OnMouseMove(x, y, keys);
+					if (OnMouseMove != null)
+						OnMouseMove(x, y, keys);
 
 					return IntPtr.Zero;
 				}
@@ -59,8 +59,8 @@ namespace View_WinAPI
 				{
 					uint keyId = (uint) wParam.ToInt32();
 
-					if (singleton.OnKeyDown != null)
-						singleton.OnKeyDown(keyId);
+					if (OnKeyDown != null)
+						OnKeyDown(keyId);
 
 					return IntPtr.Zero;
 				}
@@ -69,23 +69,18 @@ namespace View_WinAPI
 				{
 					uint keyId = (uint) wParam.ToInt32();
 
-					if (singleton.OnKeyUp != null)
-						singleton.OnKeyUp(keyId);
+					if (OnKeyUp != null)
+						OnKeyUp(keyId);
 
 					return IntPtr.Zero;
 				}
 			}
 
 			return Win32.DefWindowProc(hWnd, message, wParam, lParam);
-		};
+		}
 
 		public Window(string ClassName, string WindowName)
 		{
-			if (singleton != null)
-				throw new Exception("Window.Window: пока только одно окно");
-
-			singleton = this;
-
 			hWnd = IntPtr.Zero;
 			hInstance = IntPtr.Zero;
 			lpClassName = ClassName;
@@ -100,7 +95,7 @@ namespace View_WinAPI
 			var wndclass = new WNDCLASS
 			{
 				style = CS.VREDRAW | CS.HREDRAW,
-				lpfnWndProc = WndProc,
+				lpfnWndProc = WndProc = WndProcFunc,
 				cbClsExtra = 0,
 				cbWndExtra = 0,
 				hInstance = hInstance,
@@ -148,7 +143,7 @@ namespace View_WinAPI
 
 		public void Close()
 		{
-			Win32.PostQuitMessage(0);
+			Win32.DestroyWindow(hWnd);
 		}
 
 		~Window()
