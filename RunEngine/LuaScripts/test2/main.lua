@@ -1,7 +1,11 @@
 dofile 'LuaScripts\\test2\\sph.lua';
 
+Window = WindowWinAPI(windowName, windowName);
+Render = DirectX(Window);
+
+Physic = PhysX();
+
 local map = World:CreateMap();
-map.Physic = Logic:CreatePhysic();
 
 local Sph = CreateSphere(map,30,30);
 map:AddObject(Sph);
@@ -45,3 +49,12 @@ end;
 Window.OnKeyUp = function(key)
 	_keys[key] = false;
 end;
+
+Window:CreateTimer(12,
+	function(uElapse)
+		Physic:Update(uElapse/1000);
+		Render:OnPaint();
+	end
+);
+
+Window:Run();

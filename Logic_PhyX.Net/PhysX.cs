@@ -85,16 +85,11 @@ namespace Logic_PhyX.Net
 			}
 		}
 
-		public void Update(uint uElapse)
+		public void Update(float elapsedTime)
 		{
 			// Update Physics
-			this.Scene.Simulate(uElapse/100f);
+			this.Scene.Simulate(elapsedTime);
 			this.Scene.FetchResults(block: true);
-
-			//this.Camera.Update(elapsed);
-
-			//if (OnUpdate != null)
-			//	OnUpdate(elapsed);
 		}
 
 		public IActor3D CreateGroundPlane()

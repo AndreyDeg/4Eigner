@@ -13,7 +13,7 @@ namespace Render_SharpDX
 	{
 		Device device;
 
-		public void Create(IViewWindow window)
+		public DirectX(IViewWindow window)
 		{
 			//var Adapters = Manager.Adapters;
 			//for (int i = 0; i < Adapters.Count; i++)
@@ -167,11 +167,6 @@ namespace Render_SharpDX
 			}
 
 			device.Present();
-		}
-
-		public void ClearZBuf()
-		{
-			device.Clear(ClearFlags.ZBuffer, new RawColorBGRA(), 1.0f, 0);
 		}
 
 		//Загрузка информации о текстуре

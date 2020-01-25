@@ -15,7 +15,6 @@
 		void AddObject(IObject3D obj);
 		void AddLight(ILight3D obj);
 
-		void Update();
 		void Paint(ICamera camera);
 
 		IObject3D AddPicture(string TextureName, float x, float y, float z);
@@ -27,8 +26,6 @@
 
 	public interface IWorld
 	{
-		void UpdateMaps();
-		IObject3D CreateObject3D();
 		IMap CreateMap();
 		IMap GetMap(int iN);
 	};

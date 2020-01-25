@@ -1,5 +1,6 @@
 ﻿using BaseEngine;
 using System;
+using System.Collections.Generic;
 using View_WinAPI.WinAPI;
 
 namespace View_WinAPI
@@ -17,7 +18,6 @@ namespace View_WinAPI
 		public int iWidth { get; private set; }
 		public int iHeight { get; private set; }
 
-		public Action OnTimer { get; set; }
 		public Action<uint, uint, long> OnMouseMove { get; set; }
 		public Action<uint> OnKeyDown { get; set; }
 		public Action<uint> OnKeyUp { get; set; }
@@ -37,9 +37,7 @@ namespace View_WinAPI
 
 				case WM.TIMER:
 				{
-					if (OnTimer != null)
-						OnTimer();
-
+					Timers[(uint)wParam]?.Invoke();
 					return IntPtr.Zero;
 				}
 
@@ -125,20 +123,30 @@ namespace View_WinAPI
 				throw new Exception("Window.Window: hWnd is null");
 		}
 
-		public void Run(uint iTimeUpdate)
+		//Таймеры <nIDEvent, uElapse>
+		Dictionary<uint, Action> Timers = new Dictionary<uint, Action>();
+		uint TimerMaxId;
+
+		public void CreateTimer(uint uElapse, Action<uint> func)
 		{
-			Win32.SetTimer(hWnd, 0, iTimeUpdate, null);
+			uint nIDEvent = TimerMaxId++;
+			Win32.SetTimer(hWnd, nIDEvent, uElapse, null);
+			Timers[nIDEvent] = () => func(uElapse);
+		}
+
+		public void Run()
+		{
 			Win32.ShowWindow(hWnd, SW.MAXIMIZE);
 			Win32.UpdateWindow(hWnd);
 
-			MSG msg;
-			while (Win32.GetMessage(out msg, IntPtr.Zero, 0, 0) != 0)
+			while (Win32.GetMessage(out MSG msg, IntPtr.Zero, 0, 0) != 0)
 			{
 				Win32.TranslateMessage(ref msg);
 				Win32.DispatchMessage(ref msg);
 			}
 
-			Win32.KillTimer(hWnd, 0);
+			foreach (var timer in Timers)
+				Win32.KillTimer(hWnd, timer.Key);
 		}
 
 		public void Close()

@@ -44,9 +44,7 @@ namespace BaseEngine
 
 	public interface IViewRender
 	{
-		void Create(IViewWindow window);
 		void OnPaint();
-		void ClearZBuf();
 
 		//bool CreateVertex(int l, LPDIRECT3DVERTEXBUFFER9 g_pVB);
 		//void DrawVertex(D3DXMATRIX position, int l, LPDIRECT3DVERTEXBUFFER9 g_pVB, LPDIRECT3DTEXTURE9 g_pHDRTexture);

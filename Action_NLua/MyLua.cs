@@ -37,9 +37,9 @@ namespace Action_NLua
 			RegFuncs.Add(lua.RegisterFunction(sName, func.Target, func.Method));
 		}
 
-		public void OnTimer()
+		public void Register<T>(string sName, Func<object, T> func)
 		{
-			lua.DoString("if OnTimer then OnTimer(); end");
+			RegFuncs.Add(lua.RegisterFunction(sName, func.Target, func.Method));
 		}
 	}
 }

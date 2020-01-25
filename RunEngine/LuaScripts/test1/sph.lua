@@ -37,7 +37,7 @@ function CreateSphere()
 	end;
 
 	local model = Render:NewModel3D();
-	model:SetVertices(ToListMyVertex(vertex));
+	model:SetVertices(ToListVertex(vertex));
 	
 	local result = Object3D();
 	result.Model = model;

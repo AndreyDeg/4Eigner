@@ -5,8 +5,6 @@ namespace BaseEngine.ModelWorld
 {
 	public class Map : IMap
 	{
-		const int TIME_UPDATE_PHYSIC = 15;
-
 		private ILight3D light;
 		private ISky sky;
 		readonly List<IObject3D> objects = new List<IObject3D>();
@@ -25,11 +23,6 @@ namespace BaseEngine.ModelWorld
 		public void AddLight(ILight3D obj)
 		{
 			light = obj;
-		}
-
-		public void Update()
-		{
-			Physic?.Update(TIME_UPDATE_PHYSIC);
 		}
 
 		public void Paint(ICamera camera)

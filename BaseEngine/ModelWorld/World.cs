@@ -6,17 +6,6 @@ namespace BaseEngine.ModelWorld
 	{
 		readonly List<IMap> maps = new List<IMap>();
 
-		public void UpdateMaps()
-		{
-			foreach (var map in maps)
-				map.Update();
-		}
-
-		public IObject3D CreateObject3D()
-		{
-			return new Object3D();
-		}
-
 		public IMap CreateMap()
 		{
 			var map = new Map();

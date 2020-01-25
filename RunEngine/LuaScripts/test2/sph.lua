@@ -41,11 +41,11 @@ function CreateSphere(map,M, N)
 	end;
 
 	local model = Render:NewModel3D();
-	model:SetVertices(ToListMyVertex(vertex));
+	model:SetVertices(ToListVertex(vertex));
 	
 	local result = Object3D();
 	result.Model = model;
-	--result.Actor = map.Physic:CreateBox(0,5,0,1);
+	--result.Actor = Physic:CreateBox(0,5,0,1);
 	
 	return result;
 end;

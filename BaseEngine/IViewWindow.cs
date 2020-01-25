@@ -11,10 +11,10 @@ namespace BaseEngine
 		int iWidth { get; }
 		int iHeight { get; }
 
-		void Run(uint iTimeUpdate);
+		void Run();
 		void Close();
 
-		Action OnTimer { get; set; }
+		void CreateTimer(uint uElapse, Action<uint> func);
 		Action<uint, uint, long> OnMouseMove { get; set; }
 		Action<uint> OnKeyDown { get; set; }
 		Action<uint> OnKeyUp { get; set; }

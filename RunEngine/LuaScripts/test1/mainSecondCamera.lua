@@ -1,3 +1,5 @@
+NotWindowRun = true;
+
 dofile 'LuaScripts\\test1\\main.lua';
 
 local camera2 = Render:NewCamera();
@@ -11,3 +13,13 @@ camera2.ViewPort = Viewport(
 	0, --MinZ
 	1 --MaxZ
 );
+
+local backColor = RandomColor(1);
+
+Window:CreateTimer(12,
+	function(uElapse)
+		camera2.BackColor = backColor:GetColor(uElapse);
+	end
+);
+
+Window:Run();
