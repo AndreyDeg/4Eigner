@@ -6,16 +6,16 @@ function CreateSphere(map,M, N)
 	  local r = 127+math.sin(8*math.pi*((j-i*2)/M+0/91))*127;
 	  local g = 127+math.sin(8*math.pi*((j-i)/M+1/90))*127;
 	  local b = 127+math.sin(8*math.pi*((j-i/2)/M+2/92))*127;
-	  local a = (r+g+b)/3;
-	  return Color(a,r,g,b);
+	  --local a = (r+g+b)/3;
+	  return Color(255,r,g,b);
 	end;
 
 	local Points = setmetatable({}, {__index = table});
 	for i = 0, N do
 	  for j = 1, M do
 		Points:insert{
-		  l*math.cos(math.pi*i/N);
 		  l*math.sin(math.pi*i/N)*math.cos(2*math.pi*j/M);
+		  l*math.cos(math.pi*i/N);
 		  l*math.sin(math.pi*i/N)*math.sin(2*math.pi*j/M);
 		};
 	  end;
@@ -45,7 +45,7 @@ function CreateSphere(map,M, N)
 	
 	local result = Object3D();
 	result.Model = model;
-	--result.Actor = Physic:CreateBox(0,5,0,1);
+	result.Actor = Physic:CreateSphere(math.random(),5,math.random(),1);
 	
 	return result;
 end;

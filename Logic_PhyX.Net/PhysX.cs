@@ -43,8 +43,6 @@ namespace Logic_PhyX.Net
 
 			// Connect to the PhysX Visual Debugger (if the PVD application is running)
 			Physics.Pvd.Connect("localhost");
-
-			CreateGroundPlane();
 		}
 
 		protected virtual SceneDesc CreateSceneDesc(Foundation foundation)
@@ -94,57 +92,22 @@ namespace Logic_PhyX.Net
 
 		public IActor3D CreateGroundPlane()
 		{
-			Vector3[] vertices = 
-			{
-				new Vector3( -100, 0, -100 ),
-				new Vector3( -100, 0, 100 ),
-				new Vector3( 100, 0, -100 ),
-				new Vector3( 100, 0, 100 ),
-			};
+			var groundPlaneMaterial = Physics.CreateMaterial(0.1f, 0.1f, 0.1f);
 
-			int[] indices =
-			{
-				0, 1, 2,
-				1, 3, 2
-			};
+			var groundPlane = Physics.CreateRigidStatic();
+			groundPlane.Name = "Ground Plane";
+			groundPlane.GlobalPose = Matrix4x4.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)Math.PI / 2);
 
-			var triangleMeshDesc = new TriangleMeshDesc()
-			{
-				Flags = (MeshFlag)0,
-				Triangles = indices,
-				Points = vertices
-			};
+			var planeGeom = new PlaneGeometry();
 
-			TriangleMesh triangleMesh;
-			using (MemoryStream stream = new MemoryStream())
-			{
-				var cooking = Physics.CreateCooking();
-				var cookResult = cooking.CookTriangleMesh(triangleMeshDesc, stream);
+			RigidActorExt.CreateExclusiveShape(groundPlane, planeGeom, groundPlaneMaterial, null);
 
-				stream.Position = 0;
-				triangleMesh = Physics.CreateTriangleMesh(stream);
-			}
+			Scene.AddActor(groundPlane);
 
-			var triangleMeshGeom = new TriangleMeshGeometry(triangleMesh)
-			{
-				Scale = new MeshScale(new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Identity)
-			};
-
-			var rigidActor = Physics.CreateRigidStatic();
-
-			var material = Physics.CreateMaterial(0.7f, 0.7f, 0.1f);
-			RigidActorExt.CreateExclusiveShape(rigidActor, triangleMeshGeom, material);
-
-			rigidActor.GlobalPose =
-				Matrix4x4.CreateRotationX(-(float)System.Math.PI / 2) *
-				Matrix4x4.CreateTranslation(0, 0, 0);
-
-			Scene.AddActor(rigidActor);
-
-			return new Actor3D(rigidActor);
+			return new Actor3D(groundPlane);
 		}
 
-		public IActor3D CreateBox(float fX, float fY, float fZ, float fSize)
+		public IActor3D CreateBox(float fX, float fY, float fZ, float fSize, float fMass = 10)
 		{
 			var actor = Physics.CreateRigidDynamic();
 
@@ -154,21 +117,69 @@ namespace Logic_PhyX.Net
 
 			actor.Name = "Box";
 			actor.GlobalPose = Matrix4x4.CreateTranslation(fX, fY, fZ);
-			actor.SetMassAndUpdateInertia(10);
+			actor.SetMassAndUpdateInertia(fMass);
 
 			Scene.AddActor(actor);
 
 			return new Actor3D(actor);
 		}
 
-		public IActor3D CreateSphere(float fX, float fY, float fZ, float fR, float fMass)
+		public IActor3D CreateSphere(float fX, float fY, float fZ, float fR, float fMass = 10)
 		{
-			throw new NotImplementedException();
+			var actor = Physics.CreateRigidDynamic();
+
+			var boxGeom = new SphereGeometry(fR);
+			var material = Physics.CreateMaterial(0.7f, 0.7f, 0.1f);
+			RigidActorExt.CreateExclusiveShape(actor, boxGeom, material);
+
+			actor.Name = "Sphere";
+			actor.GlobalPose = Matrix4x4.CreateTranslation(fX, fY, fZ);
+			actor.SetMassAndUpdateInertia(fMass);
+
+			Scene.AddActor(actor);
+
+			return new Actor3D(actor);
 		}
 
 		public IActor3D CreateConcaveMesh(List<BaseEngine.MyTypes.MyVector> points, float fX, float fY, float fZ, float fMass)
 		{
 			throw new NotImplementedException();
+
+			//Vector3[] vertices = 
+			//{
+			//	new Vector3( -100, 0, -100 ),
+			//	new Vector3( -100, 0, 100 ),
+			//	new Vector3( 100, 0, -100 ),
+			//	new Vector3( 100, 0, 100 ),
+			//};
+
+			//int[] indices =
+			//{
+			//	0, 1, 2,
+			//	1, 3, 2
+			//};
+
+			//var triangleMeshDesc = new TriangleMeshDesc()
+			//{
+			//	Flags = (MeshFlag)0,
+			//	Triangles = indices,
+			//	Points = vertices
+			//};
+
+			//TriangleMesh triangleMesh;
+			//using (MemoryStream stream = new MemoryStream())
+			//{
+			//	var cooking = Physics.CreateCooking();
+			//	var cookResult = cooking.CookTriangleMesh(triangleMeshDesc, stream);
+
+			//	stream.Position = 0;
+			//	triangleMesh = Physics.CreateTriangleMesh(stream);
+			//}
+
+			//var triangleMeshGeom = new TriangleMeshGeometry(triangleMesh)
+			//{
+			//	Scale = new MeshScale(new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Identity)
+			//};
 		}
 
 		public IActor3D CreateCloth(float iX, float iY, float iZ, float iW, float iH)

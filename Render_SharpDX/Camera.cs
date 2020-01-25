@@ -7,7 +7,6 @@ namespace Render_SharpDX
 {
 	public class Camera : ICamera
 	{
-		public float R { get; set; }
 		public float fovy { get; set; }
 		public MyColor BackColor { get; set; }
 		public MyColor LightColor { get; set; }
@@ -30,29 +29,15 @@ namespace Render_SharpDX
 		{
 			get
 			{
-				//if (pos.Y < 0.2)
-				//	pos = new MyVector { X = pos.X, Y = 0.2f, Z = pos.Z };
+				var cameraYaw = angle.X;
+				var cameraPitch = angle.Y;
+				Matrix cameraRotation = Matrix.RotationYawPitchRoll(cameraYaw, cameraPitch, 0);
+				Vector3 newForward = Vector3.TransformNormal(Vector3.UnitZ, cameraRotation);
 
-				var vEyePt = new Vector3((float)(Math.Sin(angle.Y) * Math.Cos(angle.X)), (float)Math.Sin(angle.X), (float)(-Math.Cos(angle.Y) * Math.Cos(angle.X)));
-				vEyePt = vEyePt * R + pos.ToVector3();
-
-				var vLookatPt = pos.ToVector3();
-
-				/*if (vEyePt.Y < 0.2)
-				{
-					vLookatPt.Y -= vEyePt.Y;
-					vEyePt.Y = 0.2f;
-				}*/
-
-				var vUpVec = new Vector3((float)(-Math.Sin(angle.Y) * Math.Cos(angle.X + Math.PI / 2)), (float)Math.Sin(angle.X + Math.PI / 2), (float)(-Math.Cos(angle.Y) * Math.Cos(angle.X + Math.PI / 2)));
-
+				var vEyePt =  pos.ToVector3();
+				var vLookatPt = pos.ToVector3() + newForward;
+				var vUpVec = Vector3.UnitY;
 				return Convert.ToMyMatrix(Matrix.LookAtLH(vEyePt, vLookatPt, vUpVec));
-
-				/*Vector3 position = new Vector3(5.0f, 3.0f, -10.0f); 
-				Vector3 target = new Vector3(0.0f, 0.0f, 0.0f); 
-				Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
-
-				return Convert.ToMyMatrix(Matrix.LookAtLH(position, target, up));*/
 			}
 		}
 
@@ -60,8 +45,16 @@ namespace Render_SharpDX
 
 		public Camera()
 		{
-			R = 3.4f;
 			fovy = (float)Math.PI / 4.0f;
+		}
+
+		public void Move(MyVector vector)
+		{
+			var cameraYaw = angle.X;
+			var cameraPitch = angle.Y;
+			Matrix cameraRotation = Matrix.RotationYawPitchRoll(cameraYaw, cameraPitch, 0);
+
+			pos = (pos.ToVector3() + Vector3.TransformNormal(vector.ToVector3(), cameraRotation)).ToMyVector();
 		}
 
 		public void Paint()

@@ -3,7 +3,6 @@ dofile 'LuaScripts\\test1\\randomColor.lua';
 
 Window = WindowWinAPI(windowName, windowName);
 Render = DirectX(Window);
-
 Physic = PhysX();
 
 local map = World:CreateMap();
@@ -37,9 +36,10 @@ _keys = {};
 
 --Обработчие события при движении мыши
 Window.OnMouseMove = function(x, y, keys)
-    local camx = (y / Window.iHeight - 0.5) * math.pi;
-    local caym = (-x / Window.iWidth - 0.5) * math.pi*2;
-	camera.angle = Vector(camx, caym, 0);
+	local camx = (x / Window.iWidth - 0.5) * math.pi*2;
+    local camy = (y / Window.iHeight - 0.5)*0.999 * math.pi;
+	camera.angle = Vector(camx, camy, 0);
+	camera.pos = Vector(-3*math.sin(camx)*math.cos(camy), 3*math.sin(camy), -3*math.cos(camx)*math.cos(camy));
 end;
 
 --Обработчие события при нажатии кнопки

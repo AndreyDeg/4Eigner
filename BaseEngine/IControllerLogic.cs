@@ -19,7 +19,7 @@ namespace BaseEngine
 	{
 		void Update(float elapsedTime);
 		IActor3D CreateGroundPlane();
-		IActor3D CreateBox(float fX, float fY, float fZ, float fSize);
+		IActor3D CreateBox(float fX, float fY, float fZ, float fSize, float fMass);
 		IActor3D CreateSphere(float fX, float fY, float fZ, float fR, float fMass);
 		IActor3D CreateConcaveMesh(List<MyVector> points, float fX, float fY, float fZ, float fMass);
 		IActor3D CreateCloth(float iX, float iY, float iZ, float iW, float iH);

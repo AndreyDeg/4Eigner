@@ -29,7 +29,6 @@ namespace BaseEngine
 
 	public interface ICamera : IPhyOrient
 	{
-		float R { set; get; }
 		float fovy { get; set; }
 		MyColor BackColor { get; set; }
 		MyColor LightColor { get; set; }

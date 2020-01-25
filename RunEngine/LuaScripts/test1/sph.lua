@@ -11,8 +11,8 @@ function CreateSphere()
 	for i = 0, N do
 	  for j = 1, M do
 		Points:insert{
-		  l*math.cos(math.pi*i/N);
 		  l*math.sin(math.pi*i/N)*math.cos(2*math.pi*j/M);
+		  l*math.cos(math.pi*i/N);
 		  l*math.sin(math.pi*i/N)*math.sin(2*math.pi*j/M);
 		};
 	  end;
