@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using BaseEngine;
 using NLua;
@@ -26,9 +27,14 @@ namespace Action_NLua
 
 		readonly List<LuaFunction> RegFuncs = new List<LuaFunction>();
 
-		public void Register(string sName, object target, MethodInfo Method)
+		public void Register(string sName, object target)
 		{
-			RegFuncs.Add(lua.RegisterFunction(sName, target, Method));
+			lua[sName] = target;
+		}
+
+		public void Register(string sName, Delegate func)
+		{
+			RegFuncs.Add(lua.RegisterFunction(sName, func.Target, func.Method));
 		}
 
 		public void OnTimer()

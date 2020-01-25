@@ -18,7 +18,7 @@ function CreateSphere()
 	  end;
 	end;
 
-	local Vertex = setmetatable({}, {__index = table});
+	local vertex = setmetatable({}, {__index = table});
 	for i = 1, N do
 	  for j = 1, M do
 		local p1 = (i-1)*M + j;
@@ -26,18 +26,18 @@ function CreateSphere()
 		local p3 = i*M + j;
 		local p4 = i*M + math.fmod(j,M)+1; 
 
-		Vertex:insert(MyVertex(Points[p1][1],Points[p1][2],Points[p1][3],randColor(),0,0));
-		Vertex:insert(MyVertex(Points[p4][1],Points[p4][2],Points[p4][3],randColor(),0,0));
-		Vertex:insert(MyVertex(Points[p2][1],Points[p2][2],Points[p2][3],randColor(),0,0));
+		vertex:insert(Vertex(Points[p1][1],Points[p1][2],Points[p1][3],randColor(),0,0));
+		vertex:insert(Vertex(Points[p4][1],Points[p4][2],Points[p4][3],randColor(),0,0));
+		vertex:insert(Vertex(Points[p2][1],Points[p2][2],Points[p2][3],randColor(),0,0));
 
-		Vertex:insert(MyVertex(Points[p1][1],Points[p1][2],Points[p1][3],randColor(),0,0));
-		Vertex:insert(MyVertex(Points[p3][1],Points[p3][2],Points[p3][3],randColor(),0,0));
-		Vertex:insert(MyVertex(Points[p4][1],Points[p4][2],Points[p4][3],randColor(),0,0));
+		vertex:insert(Vertex(Points[p1][1],Points[p1][2],Points[p1][3],randColor(),0,0));
+		vertex:insert(Vertex(Points[p3][1],Points[p3][2],Points[p3][3],randColor(),0,0));
+		vertex:insert(Vertex(Points[p4][1],Points[p4][2],Points[p4][3],randColor(),0,0));
 	  end;
 	end;
 
-	local model = Model3D();
-	model:SetVertices(ToListMyVertex(Vertex));
+	local model = Render:NewModel3D();
+	model:SetVertices(ToListMyVertex(vertex));
 	
 	local result = Object3D();
 	result.Model = model;

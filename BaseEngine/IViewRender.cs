@@ -55,9 +55,7 @@ namespace BaseEngine
 		//bool preloadTexture(string sFileName, D3DXIMAGE_INFO ScrInfo);
 		//bool loadTexture(string sFileName, LPDIRECT3DTEXTURE9 g_pHDRTexture);
 
-		ICamera ActiveCamera { get; set; }
 		ICamera NewCamera();
-		ICamera GetCamera();
 		IModel3D NewModel3D();
 	}
 }

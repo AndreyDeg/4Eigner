@@ -18,6 +18,9 @@ namespace RunEngine
 			//new Thread(() => RunEngine("5Eigner", "LuaScripts\\test2\\main.lua")).Start();
 
 			RunEngine("4Eigner", "LuaScripts\\test1\\main.lua");
+			//RunEngine("4Eigner", "LuaScripts\\test1\\mainSecondCamera.lua");
+			//RunEngine("5Eigner", "LuaScripts\\test2\\main.lua");
+			//RunEngine("4Eigner", "LuaScripts\\main.lua");
 		}
 
 		static void RunEngine(string windowName, string actionFile)
@@ -35,62 +38,31 @@ namespace RunEngine
 			//var network	= new Network();
 
 			Func<object, List<MyVertex>> FuncToListMyVertex = action.ToList<MyVertex>;
-			action.Register("ToListMyVertex", FuncToListMyVertex.Target, FuncToListMyVertex.Method);
+			action.Register("ToListMyVertex", FuncToListMyVertex);
 
 			Func<float, float, float, float, MyColor> FuncColor = (a, r, g, b) => new MyColor((byte)a, (byte)r, (byte)g, (byte)b);
-			action.Register("Color", FuncColor.Target, FuncColor.Method);
+			action.Register("Color", FuncColor);
 
 			Func<float, float, float, MyColor, float, float, MyVertex> FuncVertex = (x, y, z, color, tu, tv) => new MyVertex(x, y, z, color, tu, tv);
-			action.Register("MyVertex", FuncVertex.Target, FuncVertex.Method);
+			action.Register("Vertex", FuncVertex);
 
-			Func<IModel3D> FuncModel3D = render.NewModel3D;
-			action.Register("Model3D", FuncModel3D.Target, FuncModel3D.Method);
+			Func<float, float, float, MyVector> FuncVector = (x, y, z) => new MyVector(x, y, z);
+			action.Register("Vector", FuncVector);
 
-			Func<IObject3D> FuncObject3D = () => new Object3D();
-			action.Register("Object3D", FuncObject3D.Target, FuncObject3D.Method);
+			Func<int, int, int, int, float, float, MyViewport> FuncViewport = (x, y, width, height, minZ, maxZ) => new MyViewport(x, y, width, height, minZ, maxZ);
+			action.Register("Viewport", FuncViewport);
 
-			Func<IMap> FuncMap = () => {
-				var map = world.CreateMap();
-				map.Physic = logic.CreatePhysic();
-				return map;
-			};
-			action.Register("Map", FuncMap.Target, FuncMap.Method);
+			action.Register("Object3D", (Func<Object3D>)(() => new Object3D()));
 
-			Func<ICamera> FuncCamera = render.GetCamera;
-			action.Register("Camera3D", FuncCamera.Target, FuncCamera.Method);
+			action.Register("World", world);
+			action.Register("Window", window);
+			action.Register("Logic", logic);
+			action.Register("Render", render);
 
 			render.Create(window);
-			var camera = render.NewCamera();
 
-			camera.ViewPort = new MyViewport
-			{
-				X = 0,
-				Y = 0,
-				Width = window.iWidth,
-				Height = window.iHeight,
-				MinZ = 0,
-				MaxZ = 1
-			};
-
-			render.ActiveCamera = camera;
 			action.DoFile(actionFile);
-			camera.Map = world.GetMap(0);
 			//Controller::network->Init();
-
-			window.OnKeyDown += delegate(uint keyId)
-			{
-				if (keyId == 27)
-					window.Close();
-			};
-
-			window.OnMouseMove += delegate(uint x, uint y, long keys)
-			{
-				camera.angle = new MyVector
-				{
-					X = ((float)y / window.iHeight - 0.5f) * (float)Math.PI,
-					Y = ((float)-x / window.iWidth - 0.5f) * (float)Math.PI*2
-				};
-			};
 
 			window.OnTimer += () =>
 			{

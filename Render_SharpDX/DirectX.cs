@@ -4,6 +4,7 @@ using SharpDX;
 using SharpDX.Direct3D9;
 using SharpDX.Mathematics.Interop;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Render_SharpDX
@@ -11,8 +12,6 @@ namespace Render_SharpDX
 	public class DirectX : IViewRender
 	{
 		Device device;
-
-		public ICamera ActiveCamera { get; set; }
 
 		public void Create(IViewWindow window)
 		{
@@ -149,22 +148,24 @@ namespace Render_SharpDX
 		{
 			if (device == null) return;
 
-			//начинаем сцену
-			device.BeginScene();
+			foreach (var camera in Cameras)
+			{
+				device.SetTransform(TransformState.View, camera.View.ToRawMatrix());
+				device.SetTransform(TransformState.Projection, camera.Proj.ToRawMatrix());
+				device.Viewport = camera.ViewPort.ToRawViewport();
 
-			var camera = ActiveCamera;
+				device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, camera.BackColor.ToRawColorBGRA(), 1.0f, 0);
 
-			var color = camera.BackColor.ToRawColorBGRA();
-			device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, color, 1.0f, 0);
-			device.SetTransform(TransformState.View, camera.View.ToRawMatrix());
-			device.SetTransform(TransformState.Projection, camera.Proj.ToRawMatrix());
-			device.Viewport = camera.ViewPort.ToRawViewport();
+				//начинаем сцену
+				device.BeginScene();
 
-			//Отрисовываем сожержимое камеры
-			camera.Paint();
+				//Отрисовываем сожержимое камеры
+				camera.Paint();
 
-			//заканчиваем сцену
-			device.EndScene();
+				//заканчиваем сцену
+				device.EndScene();
+			}
+
 			device.Present();
 		}
 
@@ -185,14 +186,13 @@ namespace Render_SharpDX
 		//	return D3DXCreateTextureFromFile( g_pd3dDevice, sFileName, &g_pHDRTexture );
 		//}
 
+		List<ICamera> Cameras = new List<ICamera>();
+
 		public ICamera NewCamera()
 		{
-			return new Camera();
-		}
-
-		public ICamera GetCamera()
-		{
-			return ActiveCamera;
+			var camera = new Camera();
+			Cameras.Add(camera);
+			return camera;
 		}
 
 		public IModel3D NewModel3D()
