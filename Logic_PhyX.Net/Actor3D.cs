@@ -24,17 +24,9 @@ namespace Logic_PhyX.Net
 			//}
 
 			if (actor != null)
-			{
-				var pos = actor.GlobalPose;
-				return new MyMatrix { M41 = pos.M41, M42 = pos.M42, M43 = pos.M43, M11 = 1, M22 = 1, M33 = 1, M44 = 1 };
-			}
+				return actor.GlobalPose.ToMyMatrix();
 
 			return new MyMatrix { M11 = 1, M22 = 1, M33 = 1, M44 = 1 };
-		}
-
-		public void set_Rotate(MyVector value)
-		{
-			throw new NotImplementedException();
 		}
 
 		public void Update(IModel3D model)

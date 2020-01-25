@@ -63,13 +63,13 @@ Window:CreateTimer(12,
 
 		Physic:Update(uElapse);
 
-		if _keys[37] then --влево
+		if _keys[37] or _keys[65] then --влево
 			camera:Move(Vector(-cameraSpeed*uElapse,0,0));
-		elseif _keys[38] then --вверх
+		elseif _keys[38] or _keys[87] then --вверх
 			camera:Move(Vector(0,0,cameraSpeed*uElapse));
-		elseif _keys[39] then --вправо
+		elseif _keys[39] or _keys[68] then --вправо
 			camera:Move(Vector(cameraSpeed*uElapse,0,0));
-		elseif _keys[40] then --вниз
+		elseif _keys[40] or _keys[83] then --вниз
 			camera:Move(Vector(0,0,-cameraSpeed*uElapse));
 		end;
 

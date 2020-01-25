@@ -10,7 +10,6 @@ namespace BaseEngine
 	public interface IActor3D
 	{
 		MyMatrix GetPosition();
-		void set_Rotate(MyVector value);
 		void Update(IModel3D model);
 		IJoint WheelJoint(IActor3D a1, MyVector globalAnchor, MyVector globalAxis);
 	};

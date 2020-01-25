@@ -17,9 +17,9 @@ namespace RunEngine
 		{
 			//new Thread(() => RunEngine("5Eigner", "LuaScripts\\test2\\main.lua")).Start();
 
-			RunEngine("4Eigner", "LuaScripts\\test1\\main.lua");
+			//RunEngine("4Eigner", "LuaScripts\\test1\\main.lua");
 			//RunEngine("4Eigner", "LuaScripts\\test1\\mainSecondCamera.lua");
-			//RunEngine("4Eigner", "LuaScripts\\test2\\main.lua");
+			RunEngine("4Eigner", "LuaScripts\\test2\\main.lua");
 			//RunEngine("4Eigner", "LuaScripts\\main.lua");
 		}
 
