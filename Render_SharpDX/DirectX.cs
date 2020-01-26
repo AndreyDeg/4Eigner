@@ -120,7 +120,7 @@ namespace Render_SharpDX
 		public void DrawVertex(MyMatrix position, int l, VertexBuffer streamData, ITexture texture)
 		{
 			device.SetTransform(TransformState.World, position.ToRawMatrix());
-			device.SetTexture(0, texture != null ? (Texture)texture.data : null);
+			device.SetTexture(0, texture != null ? ((MyTexture)texture).data : null);
 			device.VertexFormat = PositionColoredTextured.Format;
 
 			device.SetStreamSource(0, streamData, 0, PositionColoredTextured.SizeBytes);
@@ -130,7 +130,7 @@ namespace Render_SharpDX
 		public void DrawVertex(MyMatrix position, PositionColoredTextured[] verts, ITexture texture)
 		{
 			device.SetTransform(TransformState.World, position.ToRawMatrix());
-			device.SetTexture(0, texture != null ? (Texture)texture.data : null);
+			device.SetTexture(0, texture != null ? ((MyTexture)texture).data : null);
 			device.VertexFormat = PositionColoredTextured.Format;
 
 			device.DrawUserPrimitives(PrimitiveType.TriangleList, verts.Length / 3, verts);
@@ -169,17 +169,12 @@ namespace Render_SharpDX
 			device.Present();
 		}
 
-		//Загрузка информации о текстуре
-		//public bool preloadTexture(string sFileName, D3DXIMAGE_INFO &ScrInfo )
-		//{
-		//	return D3DXGetImageInfoFromFile(sFileName, &ScrInfo );
-		//}
-
 		//Загрузка текстуы
-		//public bool loadTexture(string sFileName, LPDIRECT3DTEXTURE9 &g_pHDRTexture)
-		//{
-		//	return D3DXCreateTextureFromFile( g_pd3dDevice, sFileName, &g_pHDRTexture );
-		//}
+		public ITexture LoadTexture(string sFileName)
+		{
+			var texture = Texture.FromFile(device, "./" + sFileName); //TODO_Deg сделать кеширование
+			return new MyTexture(texture);
+		}
 
 		List<ICamera> Cameras = new List<ICamera>();
 

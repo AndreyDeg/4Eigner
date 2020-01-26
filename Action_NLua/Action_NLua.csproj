@@ -7,8 +7,8 @@
     <ProjectGuid>{CFA5E7D5-EEE8-44C4-9A68-F339E751C350}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ActionLua</RootNamespace>
-    <AssemblyName>ActionLua</AssemblyName>
+    <RootNamespace>Action_NLua</RootNamespace>
+    <AssemblyName>Action_NLua</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

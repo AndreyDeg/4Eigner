@@ -7,8 +7,8 @@
     <ProjectGuid>{9D8C1A83-4021-4245-93D3-DC9B1A007DA7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RenderDirectX</RootNamespace>
-    <AssemblyName>RenderDirectX</AssemblyName>
+    <RootNamespace>Render_SharpDX</RootNamespace>
+    <AssemblyName>Render_SharpDX</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -82,6 +82,7 @@
     <Compile Include="DirectX.cs" />
     <Compile Include="Model3D.cs" />
     <Compile Include="Model3DBuffered.cs" />
+    <Compile Include="MyTexture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

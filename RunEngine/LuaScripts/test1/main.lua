@@ -8,7 +8,6 @@ Physic = PhysX();
 local map = World:CreateMap();
 
 local Sph = CreateSphere();
-map:AddObject(Sph);
 
 local camera = Render:NewCamera();
 camera.Map = map;

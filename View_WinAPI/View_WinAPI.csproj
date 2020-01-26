@@ -7,8 +7,8 @@
     <ProjectGuid>{601BCB44-3BB0-4BB0-83C1-7251264DBA10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>View_Window</RootNamespace>
-    <AssemblyName>View_Window</AssemblyName>
+    <RootNamespace>View_WinAPI</RootNamespace>
+    <AssemblyName>View_WinAPI</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using BaseEngine;
+using BaseEngine.MyTypes;
 using PhysX;
 
 namespace Logic_PhyX.Net
@@ -141,45 +143,40 @@ namespace Logic_PhyX.Net
 			return new Actor3D(actor);
 		}
 
-		public IActor3D CreateConcaveMesh(List<BaseEngine.MyTypes.MyVector> points, float fX, float fY, float fZ, float fMass)
+		public IActor3D CreateConvexMesh(List<MyVector> points, List<int> indices, float fX, float fY, float fZ, float fMass)
 		{
-			throw new NotImplementedException();
+			var convexMeshDesc = new ConvexMeshDesc
+			{
+				Flags = ConvexFlag.ComputeConvex
+			};
+			convexMeshDesc.SetPositions(points.Select(x => x.ToVector3()).ToArray());
+			convexMeshDesc.SetTriangles(indices.ToArray());
 
-			//Vector3[] vertices = 
-			//{
-			//	new Vector3( -100, 0, -100 ),
-			//	new Vector3( -100, 0, 100 ),
-			//	new Vector3( 100, 0, -100 ),
-			//	new Vector3( 100, 0, 100 ),
-			//};
+			var cooking = Physics.CreateCooking();
 
-			//int[] indices =
-			//{
-			//	0, 1, 2,
-			//	1, 3, 2
-			//};
+			var stream = new MemoryStream();
+			var cookResult = cooking.CookConvexMesh(convexMeshDesc, stream);
 
-			//var triangleMeshDesc = new TriangleMeshDesc()
-			//{
-			//	Flags = (MeshFlag)0,
-			//	Triangles = indices,
-			//	Points = vertices
-			//};
+			stream.Position = 0;
 
-			//TriangleMesh triangleMesh;
-			//using (MemoryStream stream = new MemoryStream())
-			//{
-			//	var cooking = Physics.CreateCooking();
-			//	var cookResult = cooking.CookTriangleMesh(triangleMeshDesc, stream);
+			var convexMesh = Physics.CreateConvexMesh(stream);
 
-			//	stream.Position = 0;
-			//	triangleMesh = Physics.CreateTriangleMesh(stream);
-			//}
+			var convexMeshGeom = new ConvexMeshGeometry(convexMesh)
+			{
+				Scale = new MeshScale(new Vector3(1f, 1f, 1f), Quaternion.Identity)
+			};
 
-			//var triangleMeshGeom = new TriangleMeshGeometry(triangleMesh)
-			//{
-			//	Scale = new MeshScale(new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Identity)
-			//};
+			var actor = Physics.CreateRigidDynamic();
+
+			var material = Physics.CreateMaterial(0.7f, 0.7f, 0.1f);
+			RigidActorExt.CreateExclusiveShape(actor, convexMeshGeom, material);
+
+			actor.GlobalPose = Matrix4x4.CreateTranslation(fX, fY, fZ);
+			actor.SetMassAndUpdateInertia(fMass);
+
+			Scene.AddActor(actor);
+
+			return new Actor3D(actor);
 		}
 
 		public IActor3D CreateCloth(float iX, float iY, float iZ, float iW, float iH)
@@ -187,14 +184,11 @@ namespace Logic_PhyX.Net
 			throw new NotImplementedException();
 		}
 
-		public IJoint CreateWheelJoint(IActor3D a0, IActor3D a1, BaseEngine.MyTypes.MyVector globalAnchor, BaseEngine.MyTypes.MyVector globalAxis)
+		public IJoint CreateJoint(IActor3D a0, IActor3D a1, MyVector globalAnchor, MyVector globalAxis)
 		{
-			throw new NotImplementedException();
-		}
-
-		public void SetMotor(IJoint joint, float maxForce, float velTarget)
-		{
-			throw new NotImplementedException();
+			var revoluteABJoint = Scene.CreateJoint<RevoluteJoint>((a0 as Actor3D).actor, Matrix4x4.Identity, (a1 as Actor3D).actor, Matrix4x4.Identity);
+			revoluteABJoint.SetGlobalFrame(globalAnchor.ToVector3(), globalAxis.ToVector3());
+			return new MyJoint(revoluteABJoint);
 		}
 	}
 }

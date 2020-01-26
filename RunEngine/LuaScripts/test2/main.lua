@@ -1,4 +1,7 @@
 dofile 'LuaScripts\\test2\\sph.lua';
+dofile 'LuaScripts\\old\\cube.lua';
+dofile 'LuaScripts\\old\\gazelle.lua';
+dofile 'LuaScripts\\old\\plane.lua';
 
 Window = WindowWinAPI(windowName, windowName);
 Render = DirectX(Window);
@@ -6,12 +9,14 @@ Physic = PhysX();
 
 local map = World:CreateMap();
 
-local Sph = CreateSphere(map,30,30);
-map:AddObject(Sph);
+local carActive = true;
+local car, carDrive = CreateGazelle(map, 0, 1, 0, 100);
 
-Physic:CreateGroundPlane();
+local Sph = CreateSphere(map,10,10);
 
-local cameraSpeed = 20;
+local plane = CreatePlane(map, "Pictures\\pol.jpg");
+
+local cameraSpeed = 50;
 local camera = Render:NewCamera();
 camera.Map = map;
 camera.pos = Vector(-10,0,0);
@@ -42,12 +47,15 @@ end;
 Window.OnKeyDown = function(key)
 	_keys[key] = true;
 
+	if _keys[49] then -- 1
+		carActive = not carActive;
+	end;
+
 	if key == 27 then
 		Window:Close();
 	elseif key == 32 then
-		map:AddObject(CreateSphere(map,30,30));
-
-		--CreateCube(math.random()*10-5, 50, math.random()*10-5, 10);
+		--CreateSphere(map,30,30);
+		CreateCube(map, math.random(), 5, math.random(), 10);
 	else
 		print(key);
 	end; 
@@ -63,14 +71,50 @@ Window:CreateTimer(12,
 
 		Physic:Update(uElapse);
 
-		if _keys[37] or _keys[65] then --влево
-			camera:Move(Vector(-cameraSpeed*uElapse,0,0));
-		elseif _keys[38] or _keys[87] then --вверх
-			camera:Move(Vector(0,0,cameraSpeed*uElapse));
-		elseif _keys[39] or _keys[68] then --вправо
-			camera:Move(Vector(cameraSpeed*uElapse,0,0));
-		elseif _keys[40] or _keys[83] then --вниз
-			camera:Move(Vector(0,0,-cameraSpeed*uElapse));
+		if carActive then
+			carDrive:Stop();
+			if _keys[37] or _keys[65] then --влево
+				carDrive:Left();
+			end;
+			if _keys[38] or _keys[87] then --вперед
+				carDrive:Forward();
+			end;
+			if _keys[39] or _keys[68] then --вправо
+				carDrive:Right();
+			end;
+			if _keys[40] or _keys[83] then --назад
+				carDrive:Back();
+			end;
+			local camx = camera.angle.X;
+			local camy = camera.angle.Y;
+			camera.pos = Vector(
+				car.Actor.pos.X-15*math.sin(camx)*math.cos(camy),
+				car.Actor.pos.Y+15*math.sin(camy),
+				car.Actor.pos.Z-15*math.cos(camx)*math.cos(camy)
+			);
+			if camera.pos.Y < 0.2 then
+				camera.pos = Vector(camera.pos.X, 0.2, camera.pos.Z);
+			end;
+		else
+
+			if _keys[37] or _keys[65] then --влево
+				camera:Move(Vector(-cameraSpeed*uElapse,0,0));
+			end;
+			if _keys[38] or _keys[87] then --вперед
+				camera:Move(Vector(0,0,cameraSpeed*uElapse));
+			end;
+			if _keys[39] or _keys[68] then --вправо
+				camera:Move(Vector(cameraSpeed*uElapse,0,0));
+			end;
+			if _keys[40] or _keys[83] then --назад
+				camera:Move(Vector(0,0,-cameraSpeed*uElapse));
+			end;
+			if _keys[33] or _keys[69] then --вверх
+				camera:Move(Vector(0,cameraSpeed*uElapse,0));
+			end;
+			if _keys[34] or _keys[81] then --вниз
+				camera:Move(Vector(0,-cameraSpeed*uElapse,0));
+			end;
 		end;
 
 		Render:OnPaint();

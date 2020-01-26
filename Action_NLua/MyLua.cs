@@ -10,6 +10,16 @@ namespace Action_NLua
 	{
 		private readonly Lua lua = new Lua();
 
+		public List<int> ToListInt(object obj)
+		{
+			var result = new List<int>();
+			using (var table = obj as LuaTable)
+				foreach (KeyValuePair<object, object> t in table)
+					result.Add((int)(long)t.Value);
+
+			return result;
+		}
+
 		public List<T> ToList<T>(object obj)
 		{
 			var result = new List<T>();

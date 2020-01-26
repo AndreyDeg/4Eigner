@@ -41,6 +41,8 @@ function CreateSphere()
 	
 	local result = Object3D();
 	result.Model = model;
-	
+
+	map:AddObject(result);
+
 	return result;
 end;

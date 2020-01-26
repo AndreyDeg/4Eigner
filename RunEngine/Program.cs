@@ -27,6 +27,8 @@ namespace RunEngine
 		{
 			var action = new MyLua();
 
+			action.Register("ToListInt", action.ToListInt);
+			action.Register("ToListVector", action.ToList<MyVector>);
 			action.Register("ToListVertex", action.ToList<MyVertex>);
 
 			Func<byte, byte, byte, byte, MyColor> FuncColor = (a, r, g, b) => new MyColor(a, r, g, b);

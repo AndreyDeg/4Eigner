@@ -47,5 +47,7 @@ function CreateSphere(map,M, N)
 	result.Model = model;
 	result.Actor = Physic:CreateSphere(math.random(),5,math.random(),1);
 	
+	map:AddObject(result);
+
 	return result;
 end;
