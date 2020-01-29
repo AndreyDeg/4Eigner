@@ -28,10 +28,7 @@ namespace BaseEngine.ModelWorld
 		public void Paint(ICamera camera)
 		{
 			if (sky != null)
-			{
-				sky.SetPosition(camera.pos);
-				sky.Paint();
-			}
+				sky.Paint(camera.pos);
 
 			if (light != null)
 				light.Setup();
@@ -73,19 +70,10 @@ namespace BaseEngine.ModelWorld
 			return result;
 		}
 
-		public IObject3D AddSoftPicture(string TextureName, float x, float y, float z)
+		public ISky AddSky(IModel3D model)
 		{
-			throw new NotImplementedException();
-		}
-
-		public void AddSky(string TextureName, int du, int dv)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddGround(string TextureName)
-		{
-			throw new NotImplementedException();
+			sky = new Sky { Model = model };
+			return sky;
 		}
 
 		public void AddLight()

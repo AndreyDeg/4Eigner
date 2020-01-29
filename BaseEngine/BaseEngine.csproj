@@ -75,6 +75,7 @@
     <Compile Include="IViewRender.cs" />
     <Compile Include="IViewWindow.cs" />
     <Compile Include="ModelWorld\Map.cs" />
+    <Compile Include="ModelWorld\Sky.cs" />
     <Compile Include="ModelWorld\Object3D.cs" />
     <Compile Include="ModelWorld\World.cs" />
     <Compile Include="MyTypes\MyColor.cs" />

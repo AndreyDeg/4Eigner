@@ -152,12 +152,10 @@ function CreateWheel(map, x, y, z, m, r, mirrow)
 		vertex:insert(Vertex(mirrow*Points[v[3]+1][1],Points[v[3]+1][3],Points[v[3]+1][2],CheckC(v[6]),0,0));
 	end;
 
-	local model = Render:NewModel3D();
-	model:SetVertices(ToListVertex(vertex));
-	
 	local result = Object3D();
 	result.Actor = Physic:CreateConvexMesh(ToListVector(points),ToListInt(indices), x, y, z, m);
-	result.Model = model;
+	result.Model = Render:NewModel3D();
+	result.Model:SetVertices(ToListVertex(vertex));
 
 	map:AddObject(result);
 	return result;

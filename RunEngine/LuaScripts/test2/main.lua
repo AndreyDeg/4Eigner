@@ -2,6 +2,7 @@ dofile 'LuaScripts\\test2\\sph.lua';
 dofile 'LuaScripts\\old\\cube.lua';
 dofile 'LuaScripts\\old\\gazelle.lua';
 dofile 'LuaScripts\\old\\plane.lua';
+dofile 'LuaScripts\\old\\sky.lua';
 
 Window = WindowWinAPI(windowName, windowName);
 Render = DirectX(Window);
@@ -9,12 +10,18 @@ Physic = PhysX();
 
 local map = World:CreateMap();
 
+--Добавляем землю
+local ground = CreatePlane(map, "Pictures\\pol.jpg");
+
+--Добавляем небо
+local sky = CreateSky(map, "Pictures\\stormydays_large.jpg", 4, 4);
+
 local carActive = true;
 local car, carDrive = CreateGazelle(map, 0, 1, 0, 100);
 
 local Sph = CreateSphere(map,10,10);
 
-local plane = CreatePlane(map, "Pictures\\pol.jpg");
+
 
 local cameraSpeed = 50;
 local camera = Render:NewCamera();
@@ -89,7 +96,7 @@ Window:CreateTimer(12,
 			local camy = camera.angle.Y;
 			camera.pos = Vector(
 				car.Actor.pos.X-15*math.sin(camx)*math.cos(camy),
-				car.Actor.pos.Y+15*math.sin(camy),
+				car.Actor.pos.Y+15*math.sin(camy)+5,
 				car.Actor.pos.Z-15*math.cos(camx)*math.cos(camy)
 			);
 			if camera.pos.Y < 0.2 then

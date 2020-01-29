@@ -18,9 +18,7 @@
 		void Paint(ICamera camera);
 
 		IObject3D AddPicture(string TextureName, float x, float y, float z);
-		IObject3D AddSoftPicture(string TextureName, float x, float y, float z);
-		void AddSky(string TextureName, int du, int dv);
-		void AddGround(string TextureName);
+		ISky AddSky(IModel3D model);
 		void AddLight();
 	};
 

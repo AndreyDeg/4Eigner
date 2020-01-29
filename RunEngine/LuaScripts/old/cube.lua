@@ -40,7 +40,7 @@ CreateCube = function(map,x,y,z,m)
 		end;
 	end;
 
-	local size = 0.1;
+	local size = 0.2;
 
 	local vertex = setmetatable({}, {__index = table});
 	for k, v in ipairs(Verges) do
@@ -49,13 +49,11 @@ CreateCube = function(map,x,y,z,m)
 		vertex:insert(Vertex(Points[v[3]+1][1]*size,Points[v[3]+1][2]*size,Points[v[3]+1][3]*size,CheckC(v[6]),0,0));
 	end;
 
-	local model = Render:NewModel3D();
-	model:SetVertices(ToListVertex(vertex));
-	
 	local result = Object3D();
 	result.Actor = Physic:CreateBox(x, y, z, size, m);
-	result.Model = model;
-	
+	result.Model = Render:NewModel3D();
+	result.Model:SetVertices(ToListVertex(vertex));
+
 	map:AddObject(result);
 
 	return result;

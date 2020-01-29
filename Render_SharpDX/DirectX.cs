@@ -169,6 +169,11 @@ namespace Render_SharpDX
 			device.Present();
 		}
 
+		public void ClearZBuf()
+		{
+			device.Clear(ClearFlags.ZBuffer, new RawColorBGRA(), 1.0f, 0);
+		}
+
 		//Загрузка текстуы
 		public ITexture LoadTexture(string sFileName)
 		{

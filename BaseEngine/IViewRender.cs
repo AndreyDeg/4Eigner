@@ -22,9 +22,10 @@ namespace BaseEngine
 		void Setup();
 	}
 
-	public interface ISky : IObject3D
+	public interface ISky
 	{
-		void SetPosition(MyVector pos);
+		IModel3D Model { get; set; }
+		void Paint(MyVector cameraPos);
 	}
 
 	public interface ICamera : IPhyOrient
