@@ -30,12 +30,12 @@ function CreateSphere(map,M, N)
 		local p4 = i*M + math.fmod(j,M)+1; 
 
 		vertex:insert(Vertex(Points[p1][1],Points[p1][2],Points[p1][3],color(i,j),0,0));
-		vertex:insert(Vertex(Points[p2][1],Points[p2][2],Points[p2][3],color(i,j+1),0,0));
 		vertex:insert(Vertex(Points[p4][1],Points[p4][2],Points[p4][3],color(i+1,j+1),0,0));
+		vertex:insert(Vertex(Points[p2][1],Points[p2][2],Points[p2][3],color(i,j+1),0,0));
 
 		vertex:insert(Vertex(Points[p1][1],Points[p1][2],Points[p1][3],color(i,j),0,0));
-		vertex:insert(Vertex(Points[p4][1],Points[p4][2],Points[p4][3],color(i+1,j+1),0,0));
 		vertex:insert(Vertex(Points[p3][1],Points[p3][2],Points[p3][3],color(i+1,j),0,0));
+		vertex:insert(Vertex(Points[p4][1],Points[p4][2],Points[p4][3],color(i+1,j+1),0,0));
 
 	  end;
 	end;

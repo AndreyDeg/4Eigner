@@ -46,6 +46,9 @@ namespace RunEngine
 			Func<Object3D> FuncObject3D = () => new Object3D();
 			action.Register("Object3D", FuncObject3D);
 
+			Func<ISky> FuncSky = () => new Sky();
+			action.Register("Sky", FuncSky);
+
 			action.Register("World", new World());
 			action.Register("windowName", windowName);
 

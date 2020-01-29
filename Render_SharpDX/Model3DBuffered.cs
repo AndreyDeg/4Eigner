@@ -1,5 +1,6 @@
 ﻿using BaseEngine;
 using BaseEngine.MyTypes;
+using SharpDX;
 using SharpDX.Direct3D9;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Render_SharpDX
         public VertexBuffer streamData;
         public ITexture texture;
 
-        public bool ClearZBuf;
+        public bool NoLighting, ClearZBuf;
 
         public void SetTexture(ITexture value)
         {
@@ -28,7 +29,20 @@ namespace Render_SharpDX
 
         public void SetVertices(List<MyVertex> value)
         {
-            var verts = value.Select(x => new DirectX.PositionColoredTextured(x)).ToArray();
+            var res = new List<DirectX.PositionColoredTextured>();
+            for (int i = 0; i < value.Count; i += 3)
+            {
+                var v1 = value[i].position.ToVector3();
+                var v2 = value[i + 1].position.ToVector3();
+                var v3 = value[i + 2].position.ToVector3();
+                var normal = Vector3.Cross((v2 - v1), (v3 - v1));
+                normal.Normalize();
+                res.Add(new DirectX.PositionColoredTextured(value[i], normal));
+                res.Add(new DirectX.PositionColoredTextured(value[i + 1], normal));
+                res.Add(new DirectX.PositionColoredTextured(value[i + 2], normal));
+            }
+
+            var verts = res.ToArray();
 
             iLen = verts.Length;
 
@@ -46,7 +60,13 @@ namespace Render_SharpDX
 
         public void Paint(MyMatrix position)
         {
+            if (NoLighting)
+                render.device.SetRenderState(RenderState.Lighting, false);
+
             render.DrawVertex(position, iLen, streamData, texture);
+
+            if (NoLighting)
+                render.device.SetRenderState(RenderState.Lighting, true);
 
             if (ClearZBuf)
                 render.ClearZBuf();

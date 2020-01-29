@@ -11,7 +11,7 @@ namespace Render_SharpDX
 {
 	public class DirectX : IViewRender
 	{
-		Device device;
+		public Device device { get; private set; }
 
 		public DirectX(IViewWindow window)
 		{
@@ -83,6 +83,21 @@ namespace Render_SharpDX
 			device.SetRenderState(RenderState.DiffuseMaterialSource, ColorSource.Color1);
 			device.SetRenderState(RenderState.ColorVertex, true);
 			device.SetRenderState(RenderState.Lighting, false);
+
+			//device.SetRenderState(RenderState.ZEnable, true);
+			//device.SetRenderState(RenderState.ZWriteEnable, true);
+			//device.SetRenderState(RenderState.ZFunc, Compare.LessEqual);
+			//device.SetRenderState(RenderState.AlphaBlendEnable, true);
+			//device.SetRenderState(RenderState.AlphaTestEnable, true);
+			//device.SetRenderState(RenderState.SourceBlend, Blend.SourceAlpha);
+			//device.SetRenderState(RenderState.DestinationBlend, Blend.InverseSourceAlpha);
+			//device.SetRenderState(RenderState.AlphaFunc, Compare.GreaterEqual);
+			//device.SetRenderState(RenderState.CullMode, Cull.Clockwise);
+			device.SetRenderState(RenderState.Ambient, new Color4(0.2f, 0.2f, 0.2f, 0f).ToRgba());
+			device.SetRenderState(RenderState.Lighting, true);
+			device.SetRenderState(RenderState.DiffuseMaterialSource, ColorSource.Color1);
+			device.SetRenderState(RenderState.AmbientMaterialSource, ColorSource.Color1);
+			device.SetRenderState(RenderState.SpecularMaterialSource, ColorSource.Color1);
 		}
 
 		// Our custom vertex
@@ -90,12 +105,14 @@ namespace Render_SharpDX
 		public struct PositionColoredTextured
 		{
 			public Vector3 position;
+			public Vector3 normal;
 			public RawColorBGRA color;
 			public float tu, tv;
 
-			public PositionColoredTextured(MyVertex vertex)
+			public PositionColoredTextured(MyVertex vertex, Vector3 normal)
 			{
 				this.position = vertex.position.ToVector3();
+				this.normal = normal;
 				this.color = vertex.color.ToRawColorBGRA();
 				tu = vertex.tu;
 				tv = vertex.tv;
@@ -108,7 +125,7 @@ namespace Render_SharpDX
 
 			public static VertexFormat Format
 			{
-				get { return VertexFormat.Position | VertexFormat.Diffuse | VertexFormat.Texture1; }
+				get { return VertexFormat.Position | VertexFormat.Normal | VertexFormat.Diffuse | VertexFormat.Texture1; }
 			}
 		}
 
@@ -135,14 +152,6 @@ namespace Render_SharpDX
 
 			device.DrawUserPrimitives(PrimitiveType.TriangleList, verts.Length / 3, verts);
 		}
-
-		//void DirectX::SetLight(int i, D3DLIGHT9 light)
-		//{
-		//	g_pd3dDevice->SetLight( i, &light );
-		//	g_pd3dDevice->LightEnable( i, TRUE );
-		//	g_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
-		//	g_pd3dDevice->SetRenderState( D3DRS_AMBIENT, 0 );
-		//}
 
 		public void OnPaint()
 		{
@@ -194,6 +203,19 @@ namespace Render_SharpDX
 		{
 			return new Model3DBuffered { render = this };
 			//return new Model3D { render = this };
+		}
+
+		public ILight3D NewDirectLight()
+		{
+			return new DirectLight { render = this };
+		}
+
+		public void SetLight(Light light)
+		{
+			device.SetLight(0, ref light); //TODO_deg 0
+			device.EnableLight(0, true);
+			//device.SetRenderState(D3DRS_LIGHTING, TRUE);
+			//device.SetRenderState(D3DRS_AMBIENT, 0);
 		}
 	}
 }

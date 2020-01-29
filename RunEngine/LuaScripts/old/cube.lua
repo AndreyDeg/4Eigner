@@ -24,7 +24,7 @@ local Verges = {
 	{5, 6, 7, nil, nil, nil};
 };
 
-CreateCube = function(map,x,y,z,m)
+CreateCube = function(map,x,y,z,size,m)
 
 	local RandColor = Color(255, math.random(256)-1, math.random(256)-1, math.random(256)-1);
 	
@@ -39,8 +39,6 @@ CreateCube = function(map,x,y,z,m)
 			return RandColor;
 		end;
 	end;
-
-	local size = 0.2;
 
 	local vertex = setmetatable({}, {__index = table});
 	for k, v in ipairs(Verges) do

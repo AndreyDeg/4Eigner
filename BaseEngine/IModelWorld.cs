@@ -18,7 +18,7 @@
 		void Paint(ICamera camera);
 
 		IObject3D AddPicture(string TextureName, float x, float y, float z);
-		ISky AddSky(IModel3D model);
+		void AddSky(ISky sky);
 		void AddLight();
 	};
 

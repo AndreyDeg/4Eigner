@@ -147,12 +147,19 @@ function CreateWheel(map, x, y, z, m, r, mirrow)
 	local vertex = setmetatable({}, {__index = table});
 	for k, v in ipairs(Verges) do
 
-		vertex:insert(Vertex(mirrow*Points[v[1]+1][1],Points[v[1]+1][3],Points[v[1]+1][2],CheckC(v[4]),0,0));
-		vertex:insert(Vertex(mirrow*Points[v[2]+1][1],Points[v[2]+1][3],Points[v[2]+1][2],CheckC(v[5]),0,0));
-		vertex:insert(Vertex(mirrow*Points[v[3]+1][1],Points[v[3]+1][3],Points[v[3]+1][2],CheckC(v[6]),0,0));
+		if mirrow > 0 then
+			vertex:insert(Vertex(mirrow*Points[v[1]+1][1],Points[v[1]+1][3],Points[v[1]+1][2],CheckC(v[4]),0,0));
+			vertex:insert(Vertex(mirrow*Points[v[3]+1][1],Points[v[3]+1][3],Points[v[3]+1][2],CheckC(v[6]),0,0));
+			vertex:insert(Vertex(mirrow*Points[v[2]+1][1],Points[v[2]+1][3],Points[v[2]+1][2],CheckC(v[5]),0,0));
+		else
+			vertex:insert(Vertex(mirrow*Points[v[1]+1][1],Points[v[1]+1][3],Points[v[1]+1][2],CheckC(v[4]),0,0));
+			vertex:insert(Vertex(mirrow*Points[v[2]+1][1],Points[v[2]+1][3],Points[v[2]+1][2],CheckC(v[5]),0,0));
+			vertex:insert(Vertex(mirrow*Points[v[3]+1][1],Points[v[3]+1][3],Points[v[3]+1][2],CheckC(v[6]),0,0));
+		end;
 	end;
 
 	local result = Object3D();
+	--result.Actor = Physic:CreateSphere(x, y, z, r, m);
 	result.Actor = Physic:CreateConvexMesh(ToListVector(points),ToListInt(indices), x, y, z, m);
 	result.Model = Render:NewModel3D();
 	result.Model:SetVertices(ToListVertex(vertex));

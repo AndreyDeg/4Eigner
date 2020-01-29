@@ -39,16 +39,18 @@ CreateSky = function(map,texture,du,dv)
 	local vertex = setmetatable({}, {__index = table});
 	for k, v in ipairs(Verges) do
 		vertex:insert(Vertex(Points[v[1]+1][1]*size,Points[v[1]+1][2]*size,Points[v[1]+1][3]*size,color,v[4][1]/du,v[4][2]/dv));
-		vertex:insert(Vertex(Points[v[2]+1][1]*size,Points[v[2]+1][2]*size,Points[v[2]+1][3]*size,color,v[5][1]/du,v[5][2]/dv));
 		vertex:insert(Vertex(Points[v[3]+1][1]*size,Points[v[3]+1][2]*size,Points[v[3]+1][3]*size,color,v[6][1]/du,v[6][2]/dv));
+		vertex:insert(Vertex(Points[v[2]+1][1]*size,Points[v[2]+1][2]*size,Points[v[2]+1][3]*size,color,v[5][1]/du,v[5][2]/dv));
 	end;
 
-	local model = Render:NewModel3D();
-	model.ClearZBuf = true;
-	model:SetVertices(ToListVertex(vertex));
-	model:SetTexture(Render:LoadTexture(texture));
+	local result = Sky();
+	result.Model = Render:NewModel3D();
+	result.Model.NoLighting = true;
+	result.Model.ClearZBuf = true;
+	result.Model:SetVertices(ToListVertex(vertex));
+	result.Model:SetTexture(Render:LoadTexture(texture));
 
-	map:AddSky(model);
+	map:AddSky(result);
 
-	return model;
+	return result;
 end;

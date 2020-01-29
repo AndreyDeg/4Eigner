@@ -10,19 +10,36 @@ Physic = PhysX();
 
 local map = World:CreateMap();
 
---Добавляем землю
-local ground = CreatePlane(map, "Pictures\\pol.jpg");
+--Добавляем свет
+local sun = Render:NewDirectLight();
+--sun.Type = D3DLIGHT_DIRECTIONAL; //D3DLIGHT_DIRECTIONAL;
+sun.Ambient = Color(255, 0.2*255, 0.2*255, 0.2*255);
+sun.Diffuse = Color(255, 0.8*255, 0.8*255, 0.8*255);
+sun.Specular = Color(255, 0.0, 0.0, 0.0);
+sun.Position = Vector(10,10,10);
+sun.Direction = Vector(1,1,1);
+sun.Range = 1.0;
+map:AddLight(sun);
 
 --Добавляем небо
 local sky = CreateSky(map, "Pictures\\stormydays_large.jpg", 4, 4);
+
+--Добавляем землю
+local ground = CreatePlane(map, "Pictures\\pol.jpg");
 
 local carActive = true;
 local car, carDrive = CreateGazelle(map, 0, 1, 0, 100);
 
 local Sph = CreateSphere(map,10,10);
 
+for x = -5, 5 do
+	for y = 0, 10 do
+		CreateCube(map,x*1.0,0.5+y*1.0,15,0.5,1);
+	end;
+end;
 
 
+--Камера
 local cameraSpeed = 50;
 local camera = Render:NewCamera();
 camera.Map = map;
@@ -62,7 +79,7 @@ Window.OnKeyDown = function(key)
 		Window:Close();
 	elseif key == 32 then
 		--CreateSphere(map,30,30);
-		CreateCube(map, math.random(), 5, math.random(), 10);
+		CreateCube(map, math.random(), 5, math.random(), 0.3, 10);
 	else
 		print(key);
 	end; 

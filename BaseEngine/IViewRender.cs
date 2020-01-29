@@ -17,7 +17,7 @@ namespace BaseEngine
 		void SetTexture(ITexture value);
 	};
 
-	public interface ILight3D : IPhyOrient
+	public interface ILight3D
 	{
 		void Setup();
 	}

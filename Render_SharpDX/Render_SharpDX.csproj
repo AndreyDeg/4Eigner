@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Convert.cs" />
+    <Compile Include="DirectLight.cs" />
     <Compile Include="DirectX.cs" />
     <Compile Include="Model3D.cs" />
     <Compile Include="Model3DBuffered.cs" />

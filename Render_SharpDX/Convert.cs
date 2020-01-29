@@ -81,5 +81,15 @@ namespace Render_SharpDX
 		{
 			return new MyColor(v.A, v.R, v.G, v.B);
 		}
+
+		public static RawColor4 ToRawColor4(this MyColor v)
+		{
+			return new RawColor4(v.R/255f, v.G / 255f, v.B / 255f, v.A / 255f);
+		}
+
+		public static MyColor ToMyColor(this RawColor4 v)
+		{
+			return new MyColor((byte)(v.A*255), (byte)(v.R * 255), (byte)(v.G * 255), (byte)(v.B * 255));
+		}
 	}
 }

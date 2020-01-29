@@ -70,10 +70,9 @@ namespace BaseEngine.ModelWorld
 			return result;
 		}
 
-		public ISky AddSky(IModel3D model)
+		public void AddSky(ISky sky)
 		{
-			sky = new Sky { Model = model };
-			return sky;
+			this.sky = sky;
 		}
 
 		public void AddLight()
